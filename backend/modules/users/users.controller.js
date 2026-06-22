@@ -132,6 +132,14 @@ const login = async (request, response, next) => {
         const { email, password } = request.body
         const user = await userService.getByEmail(email)
 
+        if (user && !user.password && user.googleId) {
+            return response.status(401)
+                .send({
+                    statusCode: 401,
+                    message: 'Esta conta foi criada com Google. Entre com "Continuar com Google".'
+                })
+        }
+
         if (!user || !(await user.comparePassword(password))) {
             return response.status(401)
                 .send({

@@ -59,6 +59,9 @@ User.pre('save', async function () {
 })
 
 User.methods.comparePassword = function (plainPassword) {
+    if (!this.password) {
+        return false
+    }
     return bcrypt.compare(plainPassword, this.password)
 }
 
