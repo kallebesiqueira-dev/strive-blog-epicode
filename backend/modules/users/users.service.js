@@ -22,6 +22,10 @@ const getById = async (id) => {
     return UserSchema.findById(id)
 }
 
+const getByEmail = async (email) => {
+    return UserSchema.findOne({ email }).select('+password')
+}
+
 const getByName = async (query) => {
     return UserSchema.find({
         firstName: {
@@ -49,7 +53,9 @@ const getAverageAge = async () => {
 
 const createUser = async (body) => {
     const newUser = new UserSchema(body)
-    return await newUser.save()
+    const savedUser = await newUser.save()
+    savedUser.password = undefined
+    return savedUser
 }
 
 const updateOne = async (id, body) => {
@@ -63,6 +69,7 @@ const deleteOne = async (id) => {
 module.exports = {
     getUsers,
     getById,
+    getByEmail,
     getByName,
     findUsersFromEighteenToTwenty,
     getAverageAge,

@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 9099
 const logger = require('./middlewares/globals/logger')
 const errorHandlerMiddleware = require('./middlewares/errors/errorHandler')
 const responseTimeMiddleware = require('./middlewares/globals/responseTimerMiddleware')
+const authMiddleware = require('./middlewares/auth/authMiddleware')
 
 // routes
 const usersRoute = require('./modules/users/users.route')
@@ -30,6 +31,7 @@ server.use(cors({
 server.use('/upload', express.static(path.join(__dirname, './upload')))
 server.use(logger)
 server.use(responseTimeMiddleware)
+server.use(authMiddleware)
 
 server.use('/', usersRoute)
 server.use('/', postsRoute)

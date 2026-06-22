@@ -5,6 +5,9 @@ const { userBodyValidation, userBodyValidator } = require('../../middlewares/use
 
 
 
+users.post('/login', userController.login)
+users.get('/me', userController.me)
+
 users.get('/users', userController.getUsers)
 users.get('/users/:id', userController.getById)
 users.get('/search/users', userController.getByName)

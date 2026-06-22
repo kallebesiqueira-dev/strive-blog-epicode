@@ -1,5 +1,6 @@
+const jwt = require('jsonwebtoken')
 const userService = require('./users.service')
-const {sendEmail , sgtSend} = require('../email/index')
+const { sendEmail } = require('../email/index')
 const UserNotFoundException = require('../../exceptions/users/UserNotFoundException')
 
 const getUsers = async (request, response, next) => {
@@ -35,7 +36,7 @@ const getById = async (request, response, next) => {
         const {id} = request.params
         const user = await userService.getById(id)
 
-        if (user.length === 0) {
+        if (!user) {
             throw new UserNotFoundException()
         }
 
@@ -107,19 +108,13 @@ const getAverageAge = async (request, response, next) => {
 
 const create = async (request, response, next) => {
     try {
-        const {body} = request
+        const { body } = request
         const user = await userService.createUser(body)
 
-        /*await sgtSend(
-            'markoxaser@gmail.com',
-            'NEW USER REGISTERED',
-            `A new user is registered: ${user.firstName}`
-        )*/
-
         await sendEmail(
-            'rosalyn.hammes@ethereal.email',
-            'NEW USER REGISTERED',
-            `A new user is registered: ${user.firstName}`
+            user.email,
+            'Welcome to Strive Blog',
+            `<h1>Welcome, ${user.firstName}!</h1><p>Your account has been created successfully.</p>`
         )
 
         response.status(201)
@@ -128,7 +123,44 @@ const create = async (request, response, next) => {
                 user
             })
     } catch (e) {
-        console.log(e)
+        next(e)
+    }
+}
+
+const login = async (request, response, next) => {
+    try {
+        const { email, password } = request.body
+        const user = await userService.getByEmail(email)
+
+        if (!user || !(await user.comparePassword(password))) {
+            return response.status(401)
+                .send({
+                    statusCode: 401,
+                    message: 'Invalid email or password'
+                })
+        }
+
+        const token = jwt.sign(
+            { id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+        )
+
+        response.status(200)
+            .send({ token })
+    } catch (e) {
+        next(e)
+    }
+}
+
+const me = async (request, response, next) => {
+    try {
+        response.status(200)
+            .send({
+                statusCode: 200,
+                user: request.user
+            })
+    } catch (e) {
         next(e)
     }
 }
@@ -171,6 +203,8 @@ module.exports = {
     findUsersFromEighteenToTwenty,
     getAverageAge,
     create,
+    login,
+    me,
     updateOne,
     deleteOne,
 }
