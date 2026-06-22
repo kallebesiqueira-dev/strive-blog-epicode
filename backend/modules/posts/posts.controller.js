@@ -1,4 +1,7 @@
 const postService = require('./posts.service')
+const userService = require('../users/users.service')
+const { sendEmail } = require('../email/index')
+const PostNotFoundException = require('../../exceptions/posts/PostNotFoundException')
 
 
 const findAll = async (request, response, next) => {
@@ -26,7 +29,6 @@ const findAll = async (request, response, next) => {
                 posts
             })
     } catch (e) {
-        console.log(e)
         next(e)
     }
 }
@@ -59,13 +61,23 @@ const create = async (request, response, next) => {
         const { body } = request
         const post = await postService.create(body)
 
+        if (post.author) {
+            const author = await userService.getById(post.author)
+            if (author && author.email) {
+                await sendEmail(
+                    author.email,
+                    'Your post has been published',
+                    `<h1>Hi ${author.firstName}!</h1><p>Your post "${post.title}" has been published on Strive Blog.</p>`
+                )
+            }
+        }
+
         response.status(201)
             .send({
                 statusCode: 201,
                 post
             })
     } catch (e) {
-        console.log(e)
         next(e)
     }
 }
@@ -97,6 +109,28 @@ const deleteOne = async (request, response, next) => {
                 message: `Post with id ${id} deleted successfully`
             })
 
+    } catch (e) {
+        next(e)
+    }
+}
+
+const updateCover = async (request, response, next) => {
+    try {
+        const { id } = request.params
+
+        if (!request.file) {
+            return response.status(400)
+                .send({ statusCode: 400, message: 'No image provided' })
+        }
+
+        const post = await postService.update(id, { cover: request.file.path })
+
+        if (!post) {
+            throw new PostNotFoundException()
+        }
+
+        response.status(200)
+            .send({ statusCode: 200, post })
     } catch (e) {
         next(e)
     }
@@ -136,6 +170,7 @@ module.exports = {
     findOne,
     create,
     update,
+    updateCover,
     deleteOne,
     uploadOnDisk,
     uploadFileOnCloud,

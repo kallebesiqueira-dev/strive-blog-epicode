@@ -165,6 +165,28 @@ const me = async (request, response, next) => {
     }
 }
 
+const updateAvatar = async (request, response, next) => {
+    try {
+        const { id } = request.params
+
+        if (!request.file) {
+            return response.status(400)
+                .send({ statusCode: 400, message: 'No image provided' })
+        }
+
+        const user = await userService.updateOne(id, { avatar: request.file.path })
+
+        if (!user) {
+            throw new UserNotFoundException()
+        }
+
+        response.status(200)
+            .send({ statusCode: 200, user })
+    } catch (e) {
+        next(e)
+    }
+}
+
 const updateOne = async (request, response, next) => {
     try {
         const { id } = request.params
@@ -205,6 +227,7 @@ module.exports = {
     create,
     login,
     me,
+    updateAvatar,
     updateOne,
     deleteOne,
 }

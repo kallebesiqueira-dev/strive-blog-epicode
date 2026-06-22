@@ -12,9 +12,8 @@ cloudinary.config({
 const cloudStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'EPICODE-0425',
-        format: async (req, file) => 'jpg',
-        public_id: (req, file) => file.name
+        folder: 'strive-blog',
+        format: async (req, file) => 'jpg'
     }
 })
 

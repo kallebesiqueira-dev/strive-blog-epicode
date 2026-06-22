@@ -1,6 +1,7 @@
 const express = require('express')
 const users = express.Router()
 const userController = require('./users.controller')
+const { cloud } = require('../../middlewares/multer/index')
 const { userBodyValidation, userBodyValidator } = require('../../middlewares/users/validateUserBodyMiddleware')
 
 
@@ -17,6 +18,7 @@ users.get('/average', userController.getAverageAge)
 users.post('/users', [userBodyValidation, userBodyValidator] , userController.create)
 
 
+users.patch('/users/:id/avatar', cloud.single('avatar'), userController.updateAvatar)
 users.patch('/users/:id', userController.updateOne)
 
 users.delete('/users/:id', userController.deleteOne)

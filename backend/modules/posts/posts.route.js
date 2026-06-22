@@ -12,6 +12,7 @@ post.post('/posts', postsController.create)
 post.post('/upload/post/image', upload.single('img'), postsController.uploadOnDisk)
 post.post('/upload/post/cloud', cloud.single('img'), postsController.uploadFileOnCloud)
 
+post.patch('/posts/:id/cover', cloud.single('cover'), postsController.updateCover)
 post.patch('/post/:id', postsController.update)
 
 post.delete('/post/:id', postsController.deleteOne)
