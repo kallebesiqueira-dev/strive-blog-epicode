@@ -8,6 +8,7 @@ const CreatePost = () => {
     const [form, setForm] = useState({ title: '', category: '', content: '' })
     const [file, setFile] = useState(null)
     const [error, setError] = useState('')
+    const [warning, setWarning] = useState('')
     const [saving, setSaving] = useState(false)
     const { user } = useAuth()
     const navigate = useNavigate()
@@ -17,11 +18,16 @@ const CreatePost = () => {
     const onSubmit = async (e) => {
         e.preventDefault()
         setError('')
+        setWarning('')
         setSaving(true)
         try {
             let cover
             if (file) {
-                cover = await uploadImage(file)
+                try {
+                    cover = await uploadImage(file)
+                } catch {
+                    setWarning('Não foi possível enviar a imagem (Cloudinary não configurado). Publicando sem capa...')
+                }
             }
 
             const payload = { ...form, author: user._id }
@@ -43,6 +49,7 @@ const CreatePost = () => {
             <Card className="p-4 shadow-sm">
                 <h3 className="mb-3">Novo Post</h3>
                 {error && <Alert variant="danger">{error}</Alert>}
+                {warning && <Alert variant="warning">{warning}</Alert>}
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label>Título</Form.Label>
