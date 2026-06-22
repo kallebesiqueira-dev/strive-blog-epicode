@@ -1,13 +1,17 @@
 {
-  "name": "epibooks",
+  "name": "strive-blog-backend",
   "version": "1.0.0",
-  "description": "my backend for epibooks app",
+  "description": "Backend for the Strive Blog app",
   "license": "ISC",
-  "author": "Marco Colia",
+  "author": "kallebesiqueira-dev",
   "type": "commonjs",
   "main": "main.js",
   "scripts": {
+    "start": "node main.js",
     "dev": "nodemon main.js"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.6",
@@ -17,13 +21,11 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
-    "i": "^0.3.7",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.2",
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "nodemailer": "^8.0.10",
-    "npm": "^11.16.0"
+    "nodemailer": "^8.0.10"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
