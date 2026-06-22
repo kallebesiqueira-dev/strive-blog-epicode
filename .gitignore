@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.local
+backend/upload/
+.idea/
+.DS_Store
+*.log
+dist/
+build/
