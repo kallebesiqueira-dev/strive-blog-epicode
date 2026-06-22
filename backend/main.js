@@ -1,8 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const initServer = require('./config/db')
-const PORT = 9099
+const PORT = process.env.PORT || 9099
 
 // middleware imports
 const logger = require('./middlewares/globals/logger')
@@ -13,9 +14,18 @@ const responseTimeMiddleware = require('./middlewares/globals/responseTimerMiddl
 const usersRoute = require('./modules/users/users.route')
 const postsRoute = require('./modules/posts/posts.route')
 
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    process.env.FRONTEND_URL,
+].filter(Boolean)
+
 const server = express()
 server.use(express.json())
-server.use(cors())
+server.use(cors({
+    origin: allowedOrigins,
+    credentials: true,
+}))
 server.use('/upload', express.static(path.join(__dirname, './upload')))
 server.use(logger)
 server.use(responseTimeMiddleware)
