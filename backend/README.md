@@ -2,6 +2,11 @@
 
 REST API for the Strive Blog app. Built with Express + MongoDB (Mongoose), JWT auth, Cloudinary uploads and email notifications.
 
+## Live
+
+- Frontend (Vercel): https://strive-blog-epicode-3kd3.vercel.app
+- API (Render): https://strive-blog-epicode-sgmq.onrender.com
+
 ## Setup
 
 ```bash
