@@ -29,6 +29,27 @@ const request = async (path, { method = 'GET', body, auth = true } = {}) => {
 export const api = {
     get: (path, opts) => request(path, { ...opts, method: 'GET' }),
     post: (path, body, opts) => request(path, { ...opts, method: 'POST', body }),
+    put: (path, body, opts) => request(path, { ...opts, method: 'PUT', body }),
+    del: (path, opts) => request(path, { ...opts, method: 'DELETE' }),
+}
+
+export const uploadImage = async (file) => {
+    const formData = new FormData()
+    formData.append('img', file)
+
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${API_URL}/upload/post/cloud`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+    })
+
+    const data = await response.json().catch(() => ({}))
+    if (!response.ok) {
+        throw new Error(data.message || 'Upload failed')
+    }
+
+    return data.img
 }
 
 export { API_URL }

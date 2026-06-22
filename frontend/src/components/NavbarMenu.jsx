@@ -18,6 +18,7 @@ const NavbarMenu = () => {
                 <Nav className="ms-auto align-items-center gap-2">
                     {user ? (
                         <>
+                            <Nav.Link as={Link} to="/posts/new">Novo Post</Nav.Link>
                             <Nav.Link as={Link} to="/profile">{user.firstName}</Nav.Link>
                             <Button size="sm" variant="outline-light" onClick={handleLogout}>
                                 Logout

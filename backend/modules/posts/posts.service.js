@@ -18,7 +18,7 @@ const findAll = async (page, pageSize) => {
 }
 
 const findOne = async (id) => {
-    return PostSchema.findById(id)
+    return PostSchema.findById(id).populate('author', 'firstName lastName avatar')
 }
 
 const create = async (body) => {
