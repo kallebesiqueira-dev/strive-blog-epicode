@@ -15,6 +15,8 @@ const authMiddleware = require('./middlewares/auth/authMiddleware')
 const usersRoute = require('./modules/users/users.route')
 const postsRoute = require('./modules/posts/posts.route')
 const commentsRoute = require('./modules/comments/comments.route')
+const authRoute = require('./modules/auth/auth.route')
+const { passport } = require('./config/passport')
 
 const allowedOrigins = [
     'http://localhost:3000',
@@ -31,8 +33,10 @@ server.use(cors({
 server.use('/upload', express.static(path.join(__dirname, './upload')))
 server.use(logger)
 server.use(responseTimeMiddleware)
+server.use(passport.initialize())
 server.use(authMiddleware)
 
+server.use('/', authRoute)
 server.use('/', usersRoute)
 server.use('/', postsRoute)
 server.use('/', commentsRoute)

@@ -30,6 +30,8 @@ Authorization: Bearer <token>
 ### Auth & users
 - `POST /users` — register (password hashed with bcrypt) · **public**
 - `POST /login` — returns `{ "token": "..." }` · **public**
+- `GET /auth/google` — start Google OAuth login · **public**
+- `GET /auth/google/callback` — OAuth callback; redirects to `FRONTEND_URL/login?token=...`
 - `GET /me` — current authenticated user
 - `GET /users` · `GET /users/:id` · `PATCH /users/:id` · `DELETE /users/:id`
 - `PATCH /users/:id/avatar` — upload avatar (form-data field `avatar`) → Cloudinary

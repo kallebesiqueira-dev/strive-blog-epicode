@@ -23,9 +23,15 @@ const User = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: function () {
+            return !this.googleId
+        },
         min: 8,
         select: false
+    },
+    googleId: {
+        type: String,
+        required: false
     },
     avatar: {
         type: String,
