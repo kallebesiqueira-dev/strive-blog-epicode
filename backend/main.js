@@ -13,6 +13,7 @@ const responseTimeMiddleware = require('./middlewares/globals/responseTimerMiddl
 // routes
 const usersRoute = require('./modules/users/users.route')
 const postsRoute = require('./modules/posts/posts.route')
+const commentsRoute = require('./modules/comments/comments.route')
 
 const allowedOrigins = [
     'http://localhost:3000',
@@ -32,6 +33,7 @@ server.use(responseTimeMiddleware)
 
 server.use('/', usersRoute)
 server.use('/', postsRoute)
+server.use('/', commentsRoute)
 
 // alla fine di tutte le route ci va l'error handler
 server.use(errorHandlerMiddleware)

@@ -9,6 +9,16 @@ const CommentsSchema = new mongoose.Schema({
     comment: {
         type: String,
         required: true,
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: false
+    },
+    post: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'post',
+        required: true
     }
 }, { timestamps: true, strict: true })
 
