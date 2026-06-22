@@ -29,10 +29,10 @@ const errorHandler = (err, req, res, next) => {
     }
 
     if (err.code === 11000) {
-        return res.status(400)
+        return res.status(409)
             .json({
-                statusCode: 400,
-                message: 'Mongoose Error: duplicate key error collection'
+                statusCode: 409,
+                message: 'Este email já está cadastrado. Faça login.'
             })
     }
 
