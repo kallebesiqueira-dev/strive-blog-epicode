@@ -5,7 +5,7 @@ const findAll = async (page, pageSize) => {
     const posts = await PostSchema.find()
         .limit(pageSize)
         .skip((page - 1) * pageSize)
-        .populate('author')
+        .populate('author', 'firstName lastName avatar')
 
     const totalPosts = await PostSchema.countDocuments()
     const totalPages = Math.ceil(totalPosts / pageSize)

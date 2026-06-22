@@ -13,14 +13,6 @@ const findAll = async (request, response, next) => {
             totalPages,
         } = await postService.findAll(page, pageSize)
 
-        if (posts.length === 0) {
-            return response.status(404)
-                .send({
-                    statusCode: 404,
-                    message: 'Posts not found'
-                })
-        }
-
         response.status(200)
             .send({
                 statusCode: 200,
